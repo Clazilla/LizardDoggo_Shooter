@@ -15,6 +15,7 @@ public class LizardDoggo_Shooter extends Application {
 
 	public static Group root_1 = new Group();
 	public static Crosshaire crosshair;
+	public static LizardDoggo ld;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -22,7 +23,7 @@ public class LizardDoggo_Shooter extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		
+
 		crosshair = new Crosshaire();
 
 		Scene scene = new Scene(root_1, 400, 300);
@@ -34,14 +35,14 @@ public class LizardDoggo_Shooter extends Application {
 		stage.setFullScreen(true);
 
 		stage.setOnCloseRequest(exit -> System.exit(0));
-		
+
 		Image img1 = new Image(LizardDoggo_Shooter.class.getResourceAsStream("gameScreenshot.png"));
 		ImageView imageview1 = new ImageView();
 		imageview1.setImage(img1);
 		root_1.getChildren().add(imageview1);
 
 		startSpawner();
-		
+
 		root_1.getChildren().add(crosshair);
 
 		scene.setOnMouseMoved(move -> {
@@ -52,21 +53,24 @@ public class LizardDoggo_Shooter extends Application {
 			crosshair.setTranslateX(x);
 			crosshair.setTranslateY(y);
 		});
-		
-		Image img2 = new Image(LizardDoggo_Shooter.class.getResourceAsStream("blueberry.png"));
 
 		scene.setOnMouseClicked(event -> {
+			Bullet bullet = new Bullet();
 			double x = event.getSceneX();
 			double y = event.getSceneY();
-			ImageView imageview2 = new ImageView();
-			imageview2.setImage(img2);
-			root_1.getChildren().add(imageview2);
-			imageview2.setFitHeight(50);
-			imageview2.setFitWidth(50);
-			imageview2.setTranslateX(x - 25);
-			imageview2.setTranslateY(y - 25);
-			
+			bullet.setTranslateX(x - 25);
+			bullet.setTranslateY(y - 25);
+			bullet.setFitHeight(50);
+			bullet.setFitWidth(50);
+			root_1.getChildren().add(bullet);
+
 			crosshair.toFront();
+			
+			root_1.getChildrenUnmodifiable().forEach(node -> {
+				if (node instanceof LizardDoggo) {
+					node.fireEvent(event);
+				}
+			});
 		});
 
 		stage.show();
@@ -79,7 +83,7 @@ public class LizardDoggo_Shooter extends Application {
 			@Override
 			public void run() {
 				Platform.runLater(() -> {
-					LizardDoggo ld = new LizardDoggo();
+					ld = new LizardDoggo();
 					root_1.getChildren().add(ld);
 					crosshair.toFront();
 				});
@@ -88,6 +92,5 @@ public class LizardDoggo_Shooter extends Application {
 		};
 		timer.scheduleAtFixedRate(timertask, 0, 5000);
 
-		
 	}
 }

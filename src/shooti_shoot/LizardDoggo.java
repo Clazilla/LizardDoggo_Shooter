@@ -21,6 +21,9 @@ public class LizardDoggo extends ImageView {
 
 			@Override
 			public void handle(long now) {
+				if (getParent() == null) {
+					return;
+				}
 				setTranslateX(getTranslateX() + RANDOM.nextInt(10));
 
 				if (getTranslateX() > 2000) {
@@ -29,6 +32,10 @@ public class LizardDoggo extends ImageView {
 				}
 			}
 		};
+		
+		this.setOnMouseClicked(event -> {
+			((Group) getParent()).getChildren().remove(this);
+		});
 
 		animationtimer.start();
 
