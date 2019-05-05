@@ -3,9 +3,12 @@ package shooti_shoot;
 import java.util.Random;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 
 public class LizardDoggo extends ImageView {
 
@@ -13,6 +16,7 @@ public class LizardDoggo extends ImageView {
 	private static final Random RANDOM = new Random();
 
 	private AnimationTimer animationtimer;
+	private Timeline timeline = new Timeline();
 
 	public LizardDoggo() {
 		this.setImage(IMAGE);
@@ -32,13 +36,19 @@ public class LizardDoggo extends ImageView {
 				}
 			}
 		};
-		
-		this.setOnMouseClicked(event -> {
-			((Group) getParent()).getChildren().remove(this);
+
+		KeyFrame keyframe = new KeyFrame(Duration.seconds(1), onFinished -> {
+			((Group) getParent()).getChildren().remove(LizardDoggo.this);
 		});
+
+		timeline.getKeyFrames().add(keyframe);
 
 		animationtimer.start();
 
 	}
 
+	public void delete() {
+		timeline.play();
+	}
+	
 }

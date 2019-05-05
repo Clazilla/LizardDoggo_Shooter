@@ -5,6 +5,7 @@ import java.util.TimerTask;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -65,10 +66,13 @@ public class LizardDoggo_Shooter extends Application {
 			root_1.getChildren().add(bullet);
 
 			crosshair.toFront();
-			
+
 			root_1.getChildrenUnmodifiable().forEach(node -> {
 				if (node instanceof LizardDoggo) {
-					node.fireEvent(event);
+					Bounds bounds = node.getBoundsInParent();
+					if (bounds.contains(x, y)) {
+						((LizardDoggo)node).delete();
+					}
 				}
 			});
 		});
